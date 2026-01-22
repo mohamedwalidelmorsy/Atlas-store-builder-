@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Creation History</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stores-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .stores-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .stores-header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .store-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .store-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .store-card.failed {
+            border-left-color: #dc3545;
+        }
+
+        .store-card.completed {
+            border-left-color: #28a745;
+        }
+
+        .store-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .store-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .status-badge {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-progress {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .store-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .store-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .store-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .stores-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .store-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Store Creation History</h1>
+        <p>Track all your automated Shopify store creations</p>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ stores|length }}</div>
+                <div class="stat-label">TOTAL STORES</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ stores|selectattr('status', 'equalto', 'completed')|list|length }}</div>
+                <div class="stat-label">COMPLETED</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ stores|selectattr('status', 'equalto', 'failed')|list|length }}</div>
+                <div class="stat-label">FAILED</div>
+            </div>
+        </div>
+
+        <div class="stores-container">
+            <div class="stores-header">
+                <h2>All Stores</h2>
+                <a href="/" class="btn">Create New Store</a>
+            </div>
+
+            {% if stores|length == 0 %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📦</div>
+                <h3>No Stores Yet</h3>
+                <p>You haven't created any stores yet. Start by creating your first store!</p>
+                <a href="/" class="btn" style="margin-top: 20px; display: inline-block;">Create Your First Store</a>
+            </div>
+            {% else %}
+            {% for store in stores|reverse %}
+            <div class="store-card {{ store.status }}">
+                <div class="store-header">
+                    <div class="store-name">
+                        {% if store.user_data and store.user_data.store_name %}
+                            {{ store.user_data.store_name }}
+                        {% else %}
+                            Store #{{ store.id }}
+                        {% endif %}
+                    </div>
+                    <span class="status-badge status-{{ store.status }}">
+                        {% if store.status == 'completed' %}
+                            ✓ Completed
+                        {% elif store.status == 'failed' %}
+                            ✗ Failed
+                        {% else %}
+                            ⋯ In Progress
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="store-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Customer Email</div>
+                        <div class="detail-value">
+                            {% if store.user_data and store.user_data.email %}
+                                {{ store.user_data.email }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Store URL</div>
+                        <div class="detail-value">
+                            {% if store.store_url %}
+                                <a href="{{ store.store_url }}" target="_blank" class="store-link">{{ store.store_url }}</a>
+                            {% else %}
+                                Not available
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Created At</div>
+                        <div class="detail-value">{{ store.timestamp }}</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">Products Imported</div>
+                        <div class="detail-value">
+                            {% set products_step = store.steps|selectattr('step', 'equalto', 'import_products')|first %}
+                            {% if products_step and products_step.products_imported %}
+                                {{ products_step.products_imported }} products
+                            {% else %}
+                                0 products
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if store.error %}
+                <div style="margin-top: 15px; padding: 10px; background: #f8d7da; border-radius: 8px; color: #721c24; font-size: 14px;">
+                    <strong>Error:</strong> {{ store.error }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

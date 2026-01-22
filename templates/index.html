@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Shopify Store - Automated</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00d4ff, #00b4d8, #0077b6);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input:hover,
+        .form-group select:hover {
+            border-color: #667eea;
+            background: white;
+        }
+
+        .required {
+            color: #dc3545;
+            margin-left: 3px;
+        }
+
+        .form-help {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .btn:disabled .loader {
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Create Your Shopify Store</h1>
+            <p>Automated store creation with product import from eBay Electronics. Fill in the details below!</p>
+        </div>
+                    <!-- Name Fields -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name">
+                        First Name <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="first_name" 
+                        name="first_name" 
+                        required 
+                        placeholder="John"
+                        maxlength="50"
+                        pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces allowed"
+                        autocomplete="given-name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">
+                        Last Name <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="last_name" 
+                        name="last_name" 
+                        required 
+                        placeholder="Doe"
+                        maxlength="50"
+                        pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces allowed"
+                        autocomplete="family-name"
+                    >
+                </div>
+            </div>
+
+        <form id="storeForm" method="POST" action="/create-store">
+            <div class="form-group">
+                <label for="email">
+                    Email Address <span class="required">*</span>
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    placeholder="customer@example.com"
+                    autocomplete="email"
+                >
+                <div class="form-help">This will be the owner email for your Shopify store</div>
+            </div>
+
+            <div class="form-group">
+                <label for="store_name">
+                    Store Name <span class="required">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="store_name" 
+                    name="store_name" 
+                    required 
+                    placeholder="My Amazing Store"
+                    maxlength="50"
+                    pattern="[A-Za-z0-9\s\-]+"
+                    title="Only letters, numbers, spaces, and hyphens allowed"
+                >
+                <div class="form-help">Choose a memorable name (letters, numbers, and hyphens only)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="country">
+                    Country/Region <span class="required">*</span>
+                </label>
+                <select id="country" name="country" required>
+                    <option value="">Select your country</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                    <option value="ES">Spain</option>
+                    <option value="IT">Italy</option>
+                    <option value="SG">Singapore</option>
+                    <option value="AE">United Arab Emirates</option>
+                    <option value="EG">Egypt</option>
+                </select>
+                <div class="form-help">Select the country where your business operates</div>
+            </div>
+
+            <div class="form-group">
+                <label for="main_category">
+                    Main Category <span class="required">*</span>
+                </label>
+                    <select name="product_category" required>
+                        <option value="phone_cases">Phone Cases</option>
+                        <option value="iphone">iPhone</option>
+                        <option value="samsung">Samsung Phones</option>
+                        <option value="tablets">Tablets</option>
+                        <option value="ipad">iPad</option>
+                        <option value="apple_watch">Apple Watch</option>
+                        <option value="airpods">AirPods</option>
+                        <option value="chargers">Chargers & Cables</option>
+                        <option value="power_banks">Power Banks</option>
+                        <option value="headphones">Headphones</option>
+                    </select>
+                <div class="form-help">Choose your main electronics category</div>
+            </div>
+            <!-- أضف ده بعد حقل Business Type -->
+            <div class="form-group">
+                <label for="product_count">Number of Products:</label>
+                <select name="product_count" id="product_count" required>
+                    <option value="5">5 Products</option>
+                    <option value="10">10 Products</option>
+                    <option value="15">15 Products</option>
+                    <option value="20">20 Products</option>
+                    <option value="25">25 Products</option>
+                    <option value="30">30 Products</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="sub_category_group" style="display: none;">
+                <label for="sub_category">
+                    Sub Category <span style="color: #6c757d;">(Optional)</span>
+                </label>
+                <select id="sub_category" name="sub_category">
+                    <option value="">Select sub category</option>
+                </select>
+                <div class="form-help">Narrow down your product selection (optional)</div>
+            </div>
+
+            <input type="hidden" id="product_category" name="product_category" value="">
+
+            <button type="submit" class="btn" id="submitBtn">
+                <span class="loader" id="loader"></span>
+                <span id="btnText">Create My Store</span>
+            </button>
+        </form>
+
+        <div class="footer">
+            <p>Powered by Shopify Automation System</p>
+            <p><a href="/history">View Creation History</a></p>
+        </div>
+    </div>
+
+    <script>
+        const subCategories = {
+            mobile_phones: [
+                { value: 'iphone', text: 'iPhone' },
+                { value: 'iphone_13_14_15', text: 'iPhone 13, 14, 15 (latest)' },
+                { value: 'iphone_12_11_se', text: 'iPhone 12, 11, SE' },
+                { value: 'iphone_mini', text: 'iPhone Mini' },
+                { value: 'iphone_pro', text: 'iPhone Pro / Pro Max' },
+                { value: 'samsung', text: 'Samsung' },
+                { value: 'galaxy_s_series', text: 'Galaxy S Series (S23, S24)' },
+                { value: 'galaxy_note', text: 'Galaxy Note Series' },
+                { value: 'galaxy_z', text: 'Galaxy Z Series (Foldable)' },
+                { value: 'google_pixel', text: 'Google Pixel' },
+                { value: 'oneplus', text: 'OnePlus' },
+                { value: 'huawei', text: 'Huawei' },
+                { value: 'tcl_revvl', text: 'TCL, Revvl' }
+            ],
+            tablets: [
+                { value: 'ipad', text: 'iPad' },
+                { value: 'ipad_pro', text: 'iPad Pro' },
+                { value: 'ipad_air', text: 'iPad Air' },
+                { value: 'ipad_standard', text: 'iPad (standard)' },
+                { value: 'ipad_mini', text: 'iPad mini' },
+                { value: 'samsung_galaxy_tab', text: 'Samsung Galaxy Tab' },
+                { value: 'amazon_fire', text: 'Amazon Fire Tab' },
+                { value: 'lenovo_tab', text: 'Lenovo Tab' },
+                { value: 'tcl_tab', text: 'TCL Tab' },
+                { value: 'microsoft_surface', text: 'Microsoft Surface' },
+                { value: 'kids_tablets', text: 'Kids Tablets' }
+            ],
+            smart_watches: [
+                { value: 'apple_watch', text: 'Apple Watch' },
+                { value: 'samsung_galaxy_watch', text: 'Samsung Galaxy Watch' },
+                { value: 'android_watches', text: 'Other Android Watches' },
+                { value: 'watch_straps', text: 'Watch Straps / Bands' },
+                { value: 'watch_chargers', text: 'Watch Chargers' },
+                { value: 'watch_screen_protectors', text: 'Watch Screen Protectors' }
+            ],
+            headphones: [
+                { value: 'airpods', text: 'Apple AirPods' },
+                { value: 'galaxy_buds', text: 'Samsung Galaxy Buds' },
+                { value: 'other_earphones', text: 'Other Brands' },
+                { value: 'earphone_cases', text: 'Earphone Cases' },
+                { value: 'ear_tips', text: 'Ear Tips' },
+                { value: 'earphone_chargers', text: 'Earphone Chargers' }
+            ],
+            ebook_readers: [
+                { value: 'kindle', text: 'Amazon Kindle' },
+                { value: 'kindle_paperwhite', text: 'Kindle Paperwhite' },
+                { value: 'kindle_scribe', text: 'Kindle Scribe' },
+                { value: 'kindle_basic', text: 'Kindle Basic' },
+                { value: 'other_ereaders', text: 'Other eBook Readers' }
+            ],
+            accessories: [
+                { value: 'fast_chargers', text: 'Fast Chargers' },
+                { value: 'usb_c_cables', text: 'USB-C Cables' },
+                { value: 'lightning_cables', text: 'Lightning Cables' },
+                { value: 'magnetic_mounts', text: 'Magnetic Car Mounts' },
+                { value: 'cup_holder_mounts', text: 'Cup Holder Mounts' },
+                { value: 'power_banks', text: 'Power Banks' },
+                { value: 'phone_case', text: 'Phone Case' },
+                { value: 'usb_adapters', text: 'USB-C Adapters' },
+                { value: 'hdmi_adapters', text: 'HDMI Adapters' }
+            ]
+        };
+
+        const mainCategorySelect = document.getElementById('main_category');
+        const subCategoryGroup = document.getElementById('sub_category_group');
+        const subCategorySelect = document.getElementById('sub_category');
+        const productCategoryInput = document.getElementById('product_category');
+
+        mainCategorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            
+            if (selectedCategory && subCategories[selectedCategory]) {
+                subCategorySelect.innerHTML = '<option value="">Select sub category</option>';
+                
+                subCategories[selectedCategory].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.value;
+                    option.textContent = sub.text;
+                    subCategorySelect.appendChild(option);
+                });
+                
+                subCategoryGroup.style.display = 'block';
+            } else {
+                subCategoryGroup.style.display = 'none';
+                subCategorySelect.innerHTML = '<option value="">Select sub category</option>';
+            }
+
+            updateProductCategory();
+        });
+
+        subCategorySelect.addEventListener('change', updateProductCategory);
+
+        function updateProductCategory() {
+            const main = mainCategorySelect.value;
+            const sub = subCategorySelect.value;
+            productCategoryInput.value = sub || main;
+        }
+
+        const form = document.getElementById('storeForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+
+        form.addEventListener('submit', function(e) {
+            updateProductCategory();
+            submitBtn.disabled = true;
+            btnText.textContent = 'Creating Store...';
+        });
+
+        const emailInput = document.getElementById('email');
+        emailInput.addEventListener('blur', function() {
+            const email = this.value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email && !emailPattern.test(email)) {
+                this.setCustomValidity('Please enter a valid email address');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        const storeNameInput = document.getElementById('store_name');
+        storeNameInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^A-Za-z0-9\s\-]/g, '');
+        });
+    </script>
+</body>
+</html>

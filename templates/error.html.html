@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Store Creation Failed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #dc3545;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .error-code {
+            font-family: 'Courier New', monospace;
+            background: #f1f3f5;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .steps-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .steps-container h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .steps-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps-container li {
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+            color: #495057;
+        }
+
+        .steps-container li:last-child {
+            border-bottom: none;
+        }
+
+        .step-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pending {
+            background: #e7e7e7;
+            color: #6c757d;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .support-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-icon">❌</div>
+        <h1>Store Creation Failed</h1>
+        
+        <div class="error-message">
+            <strong>Error Details:</strong><br>
+            <span class="error-code">{{ error }}</span>
+        </div>
+
+        {% if automation_log and automation_log.steps %}
+        <div class="steps-container">
+            <h3>Automation Progress:</h3>
+            <ul>
+                {% for step in automation_log.steps %}
+                <li>
+                    {% if step.step == 'create_account' %}
+                        Step 1: Create Shopify Account
+                    {% elif step.step == 'access_token' %}
+                        Step 2: Retrieve Access Token
+                    {% elif step.step == 'import_products' %}
+                        Step 3: Import Products
+                    {% elif step.step == 'transfer_ownership' %}
+                        Step 4: Transfer Ownership
+                    {% else %}
+                        {{ step.step }}
+                    {% endif %}
+                    
+                    {% if step.status == 'completed' %}
+                        <span class="step-status status-completed">✓ Completed</span>
+                    {% elif step.status == 'failed' %}
+                        <span class="step-status status-failed">✗ Failed</span>
+                    {% else %}
+                        <span class="step-status status-pending">⋯ Not Started</span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="btn-group">
+            <a href="/" class="btn btn-primary">Try Again</a>
+            <a href="/history" class="btn btn-secondary">View History</a>
+        </div>
+
+        <div class="support-info">
+            <p>If the problem persists, please check:</p>
+            <p>✓ Your .env file credentials are correct</p>
+            <p>✓ ChromeDriver is installed and updated</p>
+            <p>✓ Internet connection is stable</p>
+        </div>
+    </div>
+</body>
+</html>
