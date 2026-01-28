@@ -7,6 +7,7 @@ import time
 import random
 import requests
 import re
+import os
 from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -32,6 +33,17 @@ class AccessTokenManager:
         self.dev_dashboard_window = None
         self.admin_window = None
     
+    def save_error_screenshot(self, filename):
+        """Save screenshot to data/screenshots directory"""
+        try:
+            screenshots_dir = os.path.join("data", "screenshots")
+            os.makedirs(screenshots_dir, exist_ok=True)
+            filepath = os.path.join(screenshots_dir, filename)
+            self.driver.save_screenshot(filepath)
+            print(f"📸 Screenshot saved: {filepath}")
+        except Exception:
+            pass
+
     def random_delay(self, min_sec=1.5, max_sec=3.5):
         """Random delay"""
         delay = random.uniform(min_sec, max_sec)
@@ -65,26 +77,113 @@ class AccessTokenManager:
             return None
     
     def navigate_to_dev_dashboard(self):
-        """Navigate from Store Admin to Dev Dashboard"""
+        """Navigate from Store Admin to Dev Dashboard via UI clicks"""
         try:
-            print("\n📂 Navigating to Dev Dashboard...")
-            
+            print("\n📂 Navigating to Dev Dashboard via UI...")
+
             # Store current window as admin window
             self.admin_window = self.driver.current_window_handle
-            
-            # Direct URL to apps development page
-            dev_apps_url = f"https://{self.store_domain}/admin/settings/apps/development"
-            print(f"🔗 Going to: {dev_apps_url}")
-            self.driver.get(dev_apps_url)
-            self.random_delay(4, 6)
-            
-            # Look for "Build apps in Dev Dashboard" button
-            dev_button_selectors = [
-                "//a[contains(@href, 'dev.shopify.com/dashboard') and contains(@class, 'button-variant-primary')]",
-                "//a[contains(@href, 'dev.shopify.com/dashboard')]",
-                "//span[contains(text(), 'Build apps in Dev Dashboard')]/ancestor::a"
+
+            # Step 1: Click "Settings" in the sidebar
+            print("⚙️ Step 1: Looking for 'Settings' in sidebar...")
+            self.random_delay(1, 2)
+
+            settings_selectors = [
+                "//span[contains(@class, 'Polaris-Navigation__Text')]//span[contains(text(), 'Settings')]",
+                "//span[contains(text(), 'Settings')]",
+                "//a[contains(@href, '/settings')]"
             ]
-            
+
+            settings_button = None
+            for selector in settings_selectors:
+                try:
+                    settings_button = WebDriverWait(self.driver, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, selector))
+                    )
+                    if settings_button:
+                        print("✅ Found 'Settings' button")
+                        break
+                except:
+                    continue
+
+            if not settings_button:
+                print("❌ Could not find 'Settings' button")
+                return False
+
+            if not self.safe_click(settings_button, "Settings button"):
+                return False
+
+            self.random_delay(2, 4)
+
+            # Step 2: Click "Apps and sales channels" or "Apps"
+            print("📱 Step 2: Looking for 'Apps' option...")
+            self.random_delay(1, 2)
+
+            apps_selectors = [
+                "//span[contains(text(), 'Apps and sales channels')]",
+                "//span[contains(text(), 'Apps')]",
+                "//a[contains(@href, '/settings/apps')]"
+            ]
+
+            apps_button = None
+            for selector in apps_selectors:
+                try:
+                    apps_button = WebDriverWait(self.driver, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, selector))
+                    )
+                    if apps_button:
+                        print("✅ Found 'Apps' button")
+                        break
+                except:
+                    continue
+
+            if not apps_button:
+                print("❌ Could not find 'Apps' button")
+                return False
+
+            if not self.safe_click(apps_button, "Apps button"):
+                return False
+
+            self.random_delay(2, 4)
+
+            # Step 3: Click "Develop apps" or look for development section
+            print("🔧 Step 3: Looking for 'Develop apps' or development section...")
+            self.random_delay(1, 2)
+
+            develop_selectors = [
+                "//span[contains(text(), 'Develop apps')]",
+                "//a[contains(@href, '/apps/development')]",
+                "//button[contains(text(), 'Develop apps')]"
+            ]
+
+            develop_button = None
+            for selector in develop_selectors:
+                try:
+                    develop_button = WebDriverWait(self.driver, 8).until(
+                        EC.element_to_be_clickable((By.XPATH, selector))
+                    )
+                    if develop_button:
+                        print("✅ Found 'Develop apps' button")
+                        break
+                except:
+                    continue
+
+            if develop_button:
+                if not self.safe_click(develop_button, "Develop apps button"):
+                    return False
+                self.random_delay(2, 4)
+
+            # Step 4: Look for "Build apps in Dev Dashboard" button
+            print("🚀 Step 4: Looking for 'Build apps in Dev Dashboard' button...")
+            self.random_delay(1, 2)
+
+            dev_button_selectors = [
+                "//a[contains(@href, 'dev.shopify.com/dashboard')]",
+                "//span[contains(text(), 'Build apps in Dev Dashboard')]/ancestor::a",
+                "//span[contains(text(), 'Dev Dashboard')]/ancestor::a",
+                "//a[contains(@class, 'Polaris-Button--primary') and contains(@href, 'dev.shopify')]"
+            ]
+
             dev_button = None
             for selector in dev_button_selectors:
                 try:
@@ -93,24 +192,24 @@ class AccessTokenManager:
                         break
                 except Exception:
                     continue
-            
+
             if not dev_button:
                 print("❌ Dev Dashboard button not found")
                 return False
-            
+
             # Extract org ID from URL
             dev_url = dev_button.get_attribute('href')
             match = re.search(r'/dashboard/(\d+)', dev_url)
             if match:
                 self.partner_org_id = match.group(1)
                 print(f"📌 Partner Org ID: {self.partner_org_id}")
-            
+
             # Click button to open new tab
             if not self.safe_click(dev_button, "Dev Dashboard button"):
                 return False
-            
+
             self.random_delay(4, 6)
-            
+
             # Switch to new tab
             windows = self.driver.window_handles
             for window in windows:
@@ -119,9 +218,9 @@ class AccessTokenManager:
                     self.dev_dashboard_window = window
                     print("✅ Switched to Dev Dashboard tab")
                     break
-            
+
             self.random_delay(3, 5)
-            
+
             # Verify we're on Dev Dashboard
             current_url = self.driver.current_url
             if 'dev.shopify.com' in current_url:
@@ -130,7 +229,7 @@ class AccessTokenManager:
             else:
                 print(f"❌ Not on Dev Dashboard: {current_url}")
                 return False
-            
+
         except Exception as e:
             print(f"❌ Navigate to Dev Dashboard error: {e}")
             return False
@@ -244,11 +343,7 @@ class AccessTokenManager:
                 print(f"📍 Page title: {self.driver.title}")
                 print(f"📍 Current URL: {self.driver.current_url}")
                 
-                try:
-                    self.driver.save_screenshot(f"scopes_not_found_{self.store_name}.png")
-                    print("📸 Screenshot saved")
-                except:
-                    pass
+                self.save_error_screenshot(f"scopes_not_found_{self.store_name}.png")
                 
                 return False
             
@@ -527,11 +622,7 @@ class AccessTokenManager:
                 except:
                     pass
                 
-                try:
-                    self.driver.save_screenshot(f"credentials_extraction_failed_{self.store_name}.png")
-                    print("📸 Screenshot saved")
-                except:
-                    pass
+                self.save_error_screenshot(f"credentials_extraction_failed_{self.store_name}.png")
                 
                 return False
             
@@ -820,10 +911,7 @@ class AccessTokenManager:
             
             if not link_input:
                 print("❌ Link input field not found")
-                try:
-                    self.driver.save_screenshot(f"link_input_not_found_{self.store_name}.png")
-                except:
-                    pass
+                self.save_error_screenshot(f"link_input_not_found_{self.store_name}.png")
                 return False
             
             install_link = link_input.get_attribute('value')
@@ -850,50 +938,79 @@ class AccessTokenManager:
             
             print("✅ Install page loaded")
             
-            # Step 12: Select the CORRECT store by EXACT name
+            # Step 12: Select store by domain (store name may be hidden as *****)
             print(f"🏪 Selecting store: {self.store_name}...")
             self.random_delay(2, 3)
 
             try:
-                # 1. Get the <a> element by EXACT store name
-                store_elements = self.driver.find_elements(
-                    By.XPATH,
-                    f"//a[contains(@class,'_StoreCard')][.//h6[normalize-space()='{self.store_name}']]"
-                )
+                store_domain_short = self.store_name  # e.g. "efgrdsd-20260127-094840"
+                store_element = None
 
-                if not store_elements:
+                # Method 1: Search by domain text in s-internal-paragraph
+                store_selectors = [
+                    f"//a[contains(@class,'_StoreCard')][.//s-internal-paragraph[contains(text(),'{store_domain_short}')]]",
+                    f"//div[contains(@class,'Polaris-Box')][.//s-internal-paragraph[contains(text(),'{store_domain_short}')]]",
+                    f"//*[contains(text(),'{store_domain_short}.myshopify.com')]/ancestor::a",
+                    f"//*[contains(text(),'{store_domain_short}.myshopify.com')]/ancestor::div[contains(@class,'Polaris-Box')]",
+                    # Also try original h6 selector in case name is visible
+                    f"//a[contains(@class,'_StoreCard')][.//h6[normalize-space()='{self.store_name}']]"
+                ]
+
+                for selector in store_selectors:
+                    try:
+                        elements = self.driver.find_elements(By.XPATH, selector)
+                        if elements:
+                            store_element = elements[0]
+                            print(f"✅ Found store with selector: {selector[:50]}...")
+                            break
+                    except:
+                        continue
+
+                # Fallback: Select first store if only one exists
+                if not store_element:
+                    print("⚠️ Trying to find first available store...")
+                    first_store_selectors = [
+                        "//a[contains(@class,'_StoreCard')]",
+                        "//div[contains(@class,'Polaris-Box')]//a"
+                    ]
+                    for selector in first_store_selectors:
+                        try:
+                            elements = self.driver.find_elements(By.XPATH, selector)
+                            if elements:
+                                store_element = elements[0]
+                                print("⚠️ Using first store in list")
+                                break
+                        except:
+                            continue
+
+                if not store_element:
                     raise Exception(f"Store '{self.store_name}' not found in list")
 
-                store_link = store_elements[0]
-                print(f"✅ EXACT store found: {self.store_name}")
+                print(f"✅ Store found: {self.store_name}")
 
                 # 2. Scroll to element
                 self.driver.execute_script(
                     "arguments[0].scrollIntoView({block:'center'});",
-                    store_link
+                    store_element
                 )
                 self.random_delay(0.5, 1)
 
                 # 3. Highlight (optional)
                 self.driver.execute_script(
                     "arguments[0].style.border='3px solid red';",
-                    store_link
+                    store_element
                 )
                 self.random_delay(0.5, 1)
 
                 # 4. Click (JS because Shopify is stubborn)
-                self.driver.execute_script("arguments[0].click();", store_link)
+                self.driver.execute_script("arguments[0].click();", store_element)
 
                 print(f"🖱️ Clicked store: {self.store_name}")
 
             except Exception as e:
                 print(f"❌ Store not found: {self.store_name}")
                 print(e)
-                try:
-                    self.driver.save_screenshot(f"store_not_found_{self.store_name}.png")
-                    print("📸 Screenshot saved")
-                except:
-                    pass
+                self.save_error_screenshot(f"store_not_found_{self.store_name}.png")
                 return False
 
             self.random_delay(3, 5)
@@ -1084,11 +1201,5 @@ class AccessTokenManager:
             
         except Exception as e:
             print(f"\n❌ Access token retrieval failed: {e}")
-            
-            try:
-                self.driver.save_screenshot(f"access_token_error_{self.store_name}.png")
-                print(f"Screenshot saved: access_token_error_{self.store_name}.png")
-            except Exception:
-                pass
-            
+            self.save_error_screenshot(f"access_token_error_{self.store_name}.png")
             return None

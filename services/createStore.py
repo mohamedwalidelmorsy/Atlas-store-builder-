@@ -7,6 +7,7 @@ import json
 import time
 import random
 import os
+import re
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -44,10 +45,25 @@ class ShopifyAccountCreator:
             raise ValueError("Missing SHOPIFY_DEV_EMAIL or SHOPIFY_DEV_PASSWORD in .env")
     
     # ============================================================
+    # HELPER METHODS
+    # ============================================================
+
+    def save_error_screenshot(self, filename):
+        """Save screenshot to data/screenshots directory"""
+        try:
+            screenshots_dir = os.path.join("data", "screenshots")
+            os.makedirs(screenshots_dir, exist_ok=True)
+            filepath = os.path.join(screenshots_dir, filename)
+            self.driver.save_screenshot(filepath)
+            print(f"📸 Screenshot saved: {filepath}")
+        except Exception:
+            pass
+
+    # ============================================================
     # HUMAN-LIKE DELAYS (PRESERVED)
     # ============================================================
-    
-       
+
+
     def random_short_delay(self):
         delay = random.uniform(0.3, 0.8)
         print(f"Human-like wait: {delay:.1f}s")
@@ -403,13 +419,7 @@ class ShopifyAccountCreator:
             print("⚠️ Create button is disabled!")
             print("Checking form completion...")
             
-            # Try to take screenshot
-            try:
-                self.driver.save_screenshot("form_validation_error.png")
-                print("Screenshot saved: form_validation_error.png")
-            except:
-                pass
-            
+            self.save_error_screenshot("form_validation_error.png")
             return False
         
         print("✅ Found Create development store button")
@@ -541,16 +551,31 @@ class ShopifyAccountCreator:
         try:
             print("Extracting store information...")
             self.random_long_delay()
-            
+
             current_url = self.driver.current_url
             print(f"Current URL: {current_url}")
-            
+
             store_url = None
             store_id = None
-            
-            if "myshopify.com" in current_url:
+
+            # Pattern 1: admin.shopify.com/store/{store-name}/... (New Shopify Admin)
+            if "admin.shopify.com/store/" in current_url:
+                match = re.search(r'admin\.shopify\.com/store/([^/]+)', current_url)
+                if match:
+                    store_id = match.group(1)
+                    store_url = f"https://{store_id}.myshopify.com"
+                    print(f"✅ Extracted from admin.shopify.com format")
+
+            # Pattern 2: {store-name}.myshopify.com (Old format)
+            elif "myshopify.com" in current_url:
                 store_url = current_url.split("admin")[0] if "admin" in current_url else current_url
-                
+                try:
+                    store_id = store_url.split("//")[1].split(".myshopify.com")[0]
+                except:
+                    store_id = "unknown"
+                print(f"✅ Extracted from myshopify.com format")
+
+            # Fallback: Search in page links
             if not store_url:
                 try:
                     link_elements = self.driver.find_elements(By.TAG_NAME, "a")
@@ -558,31 +583,26 @@ class ShopifyAccountCreator:
                         href = link.get_attribute("href")
                         if href and "myshopify.com" in href:
                             store_url = href.split("admin")[0] if "admin" in href else href
+                            store_id = store_url.split("//")[1].split(".myshopify.com")[0]
                             break
                 except:
                     pass
-            
-            if store_url:
-                try:
-                    store_id = store_url.split("//")[1].split(".myshopify.com")[0]
-                except:
-                    store_id = "unknown"
-            
+
             if not store_url:
                 print("Warning: Could not extract store URL, using placeholder")
                 timestamp = int(time.time())
                 store_id = f"store-{timestamp}"
                 store_url = f"https://{store_id}.myshopify.com"
-            
+
             print(f"Store URL: {store_url}")
             print(f"Store ID: {store_id}")
-            
+
             return {
                 'store_url': store_url,
                 'store_id': store_id,
                 'created_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             }
-            
+
         except Exception as e:
             print(f"Error extracting store info: {str(e)}")
             return None
@@ -594,24 +614,27 @@ class ShopifyAccountCreator:
     def change_store_password(self, new_password="1234"):
         """
         Change the store password to a default password
+        Returns: dict with 'success' (bool) and 'password' (str - new or current)
         Steps:
         1. Click on "Online Store" in navigation
         2. Click on "Preferences"
-        3. Clear and enter new password in password field
-        4. Click Save button
+        3. Get current password (save it)
+        4. Try to change password and save
         """
+        result = {'success': False, 'password': None}
+
         try:
             print("\n🔐 Changing store password...")
-            print("="*70)
+            print("=" * 70)
 
             # Step 1: Click "Online Store" in navigation
             print("📦 Step 1: Looking for 'Online Store' navigation item...")
             self.random_short_delay()
 
             online_store_selectors = [
-                "//span[@class='Polaris-Navigation__Text Polaris-Navigation__Text--truncated']//span[contains(text(), 'Online Store')]",
                 "//span[contains(@class, 'Polaris-Navigation__Text')]//span[contains(text(), 'Online Store')]",
-                "//a[contains(@href, '/themes')]//span[contains(text(), 'Online Store')]"
+                "//span[contains(text(), 'Online Store')]",
+                "//a[contains(@href, '/online_store')]"
             ]
 
             online_store_button = None
@@ -623,18 +646,18 @@ class ShopifyAccountCreator:
                     if online_store_button:
                         print("✅ Found 'Online Store' button")
                         break
-                except Exception:
+                except:
                     continue
 
             if not online_store_button:
                 print("❌ Could not find 'Online Store' button")
-                return False
+                return result
 
             # Click Online Store
             try:
                 online_store_button.click()
                 print("✅ Clicked 'Online Store'")
-            except Exception:
+            except:
                 self.driver.execute_script("arguments[0].click();", online_store_button)
                 print("✅ Clicked 'Online Store' (JS)")
 
@@ -645,9 +668,9 @@ class ShopifyAccountCreator:
             self.random_short_delay()
 
             preferences_selectors = [
-                "//span[@class='Polaris-Navigation__Text Polaris-Navigation__Text--truncated']//span[contains(text(), 'Preferences')]",
                 "//span[contains(@class, 'Polaris-Navigation__Text')]//span[contains(text(), 'Preferences')]",
-                "//a[contains(@href, '/preferences')]//span[contains(text(), 'Preferences')]"
+                "//span[contains(text(), 'Preferences')]",
+                "//a[contains(@href, '/preferences')]"
             ]
 
             preferences_button = None
@@ -659,131 +682,105 @@ class ShopifyAccountCreator:
                     if preferences_button:
                         print("✅ Found 'Preferences' button")
                         break
-                except Exception:
+                except:
                     continue
 
             if not preferences_button:
                 print("❌ Could not find 'Preferences' button")
-                return False
+                return result
 
             # Click Preferences
             try:
                 preferences_button.click()
                 print("✅ Clicked 'Preferences'")
-            except Exception:
+            except:
                 self.driver.execute_script("arguments[0].click();", preferences_button)
                 print("✅ Clicked 'Preferences' (JS)")
 
             self.random_long_delay()
 
-            # Step 3: Find and fill password field
+            # Step 3: Find password field
             print(f"🔑 Step 3: Looking for password field...")
             self.random_short_delay()
 
-            # Search for input directly (whether enabled or not)
-            password_input_selectors = [
-                # Very precise search - through Label "Password" and what follows
-                "//label[@id=':r9:Label']//following::input[@id=':r9:']",
-                "//label[.//span[text()='Password']]/following::input[@type='text'][1]",
-                "//div[contains(@class, 'Polaris-FormLayout__Item')]//label[.//span[text()='Password']]/following::input[@type='text'][1]",
-                # Search through Labelled container
-                "//div[contains(@class, 'Polaris-Labelled')]//label[.//span[text()='Password']]/following::input[@type='text' and contains(@class, 'Polaris-TextField__Input')][1]",
-                # Search by attributes
-                "//input[@autocomplete='off' and @type='text' and @maxlength='100' and contains(@class, 'Polaris-TextField__Input')]",
-                "//input[@data-form-type='other' and @type='text' and contains(@class, 'Polaris-TextField__Input')]"
+            password_input = None
+
+            # Try CSS Selectors first (simpler and more reliable)
+            css_selectors = [
+                "input.Polaris-TextField__Input[maxlength='100']",
+                "input.Polaris-TextField__Input[type='text']",
+                "div.Polaris-TextField input.Polaris-TextField__Input"
             ]
 
-            password_input = None
-            for i, selector in enumerate(password_input_selectors):
+            for selector in css_selectors:
                 try:
-                    print(f"  Trying selector {i+1}/{len(password_input_selectors)}...")
-                    # Use presence only (not clickable) because field might be disabled
-                    elements = WebDriverWait(self.driver, 5).until(
-                        EC.presence_of_all_elements_located((By.XPATH, selector))
+                    password_input = WebDriverWait(self.driver, 8).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, selector))
                     )
-
-                    if elements:
-                        password_input = elements[0]
-                        print(f"✅ Found password field using selector {i+1}")
-                        print(f"   Displayed: {password_input.is_displayed()}")
-                        print(f"   Enabled: {password_input.is_enabled()}")
+                    if password_input:
+                        print(f"✅ Found password field with CSS: {selector}")
                         break
-
-                except Exception as e:
-                    print(f"  Selector {i+1} failed: {str(e)[:80]}...")
+                except:
                     continue
 
+            # Fallback to XPath if CSS fails
             if not password_input:
-                print("❌ Could not find password field at all")
-                try:
-                    self.driver.save_screenshot("password_field_not_found.png")
-                    print("📸 Screenshot saved")
-                except:
-                    pass
-                return False
+                xpath_selectors = [
+                    "//input[contains(@class, 'Polaris-TextField__Input')]",
+                    "//div[contains(@class, 'Polaris-TextField')]//input[@type='text']"
+                ]
+                for selector in xpath_selectors:
+                    try:
+                        password_input = WebDriverWait(self.driver, 5).until(
+                            EC.presence_of_element_located((By.XPATH, selector))
+                        )
+                        if password_input:
+                            print(f"✅ Found password field with XPath")
+                            break
+                    except:
+                        continue
 
-            # Scroll to element to ensure it's visible
+            if not password_input:
+                print("❌ Could not find password field")
+                self.save_error_screenshot("password_field_not_found.png")
+                return result
+
+            # Scroll to element
             self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", password_input)
             self.random_short_delay()
 
-            # Try to enable if disabled
-            try:
-                if not password_input.is_enabled():
-                    print("⚠️ Field is disabled, trying to enable via JavaScript...")
-                    self.driver.execute_script("arguments[0].removeAttribute('disabled');", password_input)
-                    self.driver.execute_script("arguments[0].removeAttribute('aria-disabled');", password_input)
-                    self.driver.execute_script("arguments[0].readOnly = false;", password_input)
-                    self.random_short_delay()
-                    print("✅ Field enabled via JS")
-            except Exception as e:
-                print(f"⚠️ Could not enable field: {e}")
+            # Get current password value and SAVE IT
+            current_password = password_input.get_attribute('value')
+            print(f"📋 Current password in field: '{current_password}'")
+            result['password'] = current_password  # Save current password
 
-            # Try to click on field to ensure focus
+            # Try to change password
+            print(f"✏️ Trying to change password to: {new_password}")
             try:
-                password_input.click()
-                print("✅ Clicked on field")
-            except Exception:
-                try:
-                    self.driver.execute_script("arguments[0].click();", password_input)
-                    print("✅ Clicked on field (JS)")
-                except Exception as e:
-                    print(f"⚠️ Could not click field: {e}")
-
-            self.random_short_delay()
-
-            # Clear old value using JS only (safer)
-            try:
+                # Clear using JS
                 self.driver.execute_script("arguments[0].value = '';", password_input)
                 self.driver.execute_script("arguments[0].focus();", password_input)
-                print("✅ Cleared password field (JS)")
-            except Exception as e:
-                print(f"⚠️ Failed to clear field: {e}")
 
-            self.random_short_delay()
-
-            # Enter new password using JS directly
-            print(f"✏️ Entering new password: {new_password}")
-            try:
-                # Use JS to enter value and dispatch Events
+                # Enter new password using JS and dispatch events
                 self.driver.execute_script(f"""
                     arguments[0].value = '{new_password}';
                     arguments[0].dispatchEvent(new Event('input', {{ bubbles: true }}));
                     arguments[0].dispatchEvent(new Event('change', {{ bubbles: true }}));
-                    arguments[0].focus();
                 """, password_input)
-                print(f"✅ Password entered via JS: {new_password}")
 
-                # Verify the value
-                current_value = password_input.get_attribute('value')
-                print(f"   Current value in field: '{current_value}'")
+                # Verify value
+                new_value = password_input.get_attribute('value')
+                print(f"   Value in field: '{new_value}'")
 
-                if current_value != new_password:
-                    print(f"⚠️ Value mismatch! Trying again...")
-                    self.driver.execute_script(f"arguments[0].value = '{new_password}';", password_input)
+                if new_value == new_password:
+                    print(f"✅ Password entered: {new_password}")
+                    result['password'] = new_password
+                else:
+                    print(f"⚠️ Password didn't change, keeping current: {current_password}")
 
             except Exception as e:
-                print(f"❌ Failed to enter password: {e}")
-                return False
+                print(f"⚠️ Could not change password: {e}")
+                print(f"📋 Keeping current password: {current_password}")
 
             self.random_short_delay()
 
@@ -792,9 +789,9 @@ class ShopifyAccountCreator:
             self.random_short_delay()
 
             save_button_selectors = [
-                "//button[contains(@class, '_ContextualButton') and contains(@class, '_Primary')][@type='submit']",
                 "//button[@type='submit' and contains(@class, 'Primary')]",
-                "//button[@type='submit']//span[contains(text(), 'Save')]"
+                "//button[@type='submit']//span[contains(text(), 'Save')]",
+                "//button[contains(@class, 'Polaris-Button--primary')]"
             ]
 
             save_button = None
@@ -806,39 +803,38 @@ class ShopifyAccountCreator:
                     if save_button:
                         print("✅ Found 'Save' button")
                         break
-                except Exception:
+                except:
                     continue
 
-            if not save_button:
-                print("❌ Could not find 'Save' button")
-                return False
-
-            # Click Save
-            try:
-                save_button.click()
-                print("✅ Clicked 'Save' button")
-            except Exception:
-                self.driver.execute_script("arguments[0].click();", save_button)
-                print("✅ Clicked 'Save' button (JS)")
+            if save_button:
+                # Click Save
+                try:
+                    save_button.click()
+                    print("✅ Clicked 'Save' button")
+                    result['success'] = True
+                except:
+                    try:
+                        self.driver.execute_script("arguments[0].click();", save_button)
+                        print("✅ Clicked 'Save' button (JS)")
+                        result['success'] = True
+                    except:
+                        print("⚠️ Could not click Save button")
+            else:
+                print("⚠️ Could not find 'Save' button")
 
             self.random_long_delay()
 
-            print("✅ Password changed successfully!")
-            print("="*70)
-            return True
+            if result['success']:
+                print(f"✅ Password saved: {result['password']}")
+            else:
+                print(f"📋 Password copied: {result['password']}")
+            print("=" * 70)
+            return result
 
         except Exception as e:
             print(f"❌ Failed to change password: {str(e)}")
-            import traceback
-            traceback.print_exc()
-
-            try:
-                self.driver.save_screenshot("password_change_error.png")
-                print("📸 Screenshot saved: password_change_error.png")
-            except Exception:
-                pass
-
-            return False
+            self.save_error_screenshot("password_change_error.png")
+            return result
 
     # ============================================================
     # MAIN METHOD
@@ -911,35 +907,38 @@ class ShopifyAccountCreator:
             self.driver.get(admin_url)
             self.random_long_delay()
 
-            # Change store password to default
-            if not self.change_store_password("1234"):
-                print("⚠️ Warning: Failed to change store password, continuing anyway...")
+            # Change store password to default (or get current password)
+            password_result = self.change_store_password("1234")
+            store_password = password_result.get('password') if password_result else None
+            if store_password:
+                print(f"📋 Store password: {store_password}")
+            else:
+                print("⚠️ Warning: Could not get store password")
 
             print("="*70)
             print("Store created successfully!")
             print(f"URL: {store_info['store_url']}")
             print(f"ID: {store_info['store_id']}")
+            if store_password:
+                print(f"Password: {store_password}")
             print("="*70)
 
             store_data = {
                 'store_url': store_info['store_url'],
                 'store_id': store_info['store_id'],
                 'admin_url': admin_url,
-                'created_at': store_info.get('created_at')
+                'created_at': store_info.get('created_at'),
+                'store_password': store_password
             }
 
             return store_data, self.driver
             
         except Exception as e:
             print(f"Store creation failed: {str(e)}")
-            
-            try:
-                if self.driver:
-                    self.driver.save_screenshot("store_creation_error.png")
-                    print("Screenshot saved: store_creation_error.png")
-            except:
-                pass
-            
+
+            if self.driver:
+                self.save_error_screenshot("store_creation_error.png")
+
             if self.driver:
                 self.driver.quit()
                 print("Browser closed due to error")

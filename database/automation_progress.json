@@ -8812,5 +8812,657 @@
         "store_id": null,
         "error": "Message: \n",
         "failed_at": "2026-01-19 14:33:00"
+    },
+    {
+        "id": 211,
+        "timestamp": "2026-01-27 08:45:29",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "GB",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 08:45:29",
+                "data": {
+                    "store_url": "https://store-1769492798.myshopify.com",
+                    "store_id": "store-1769492798",
+                    "admin_url": "https://store-1769492798.myshopify.com/admin",
+                    "created_at": "2026-01-27 08:46:38"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-27 08:47:36"
+            }
+        ],
+        "store_url": "https://store-1769492798.myshopify.com",
+        "store_id": "store-1769492798",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-27 08:48:16"
+    },
+    {
+        "id": 212,
+        "timestamp": "2026-01-27 08:48:35",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "GB",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 08:48:35",
+                "data": {
+                    "store_url": "https://store-1769492984.myshopify.com",
+                    "store_id": "store-1769492984",
+                    "admin_url": "https://store-1769492984.myshopify.com/admin",
+                    "created_at": "2026-01-27 08:49:44"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-27 08:50:33"
+            }
+        ],
+        "store_url": "https://store-1769492984.myshopify.com",
+        "store_id": "store-1769492984",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-27 08:51:12"
+    },
+    {
+        "id": 213,
+        "timestamp": "2026-01-27 08:53:01",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "GB",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 08:53:01",
+                "data": {
+                    "store_url": "https://store-1769493255.myshopify.com",
+                    "store_id": "store-1769493255",
+                    "admin_url": "https://store-1769493255.myshopify.com/admin",
+                    "created_at": "2026-01-27 08:54:15"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-27 08:55:17"
+            }
+        ],
+        "store_url": "https://store-1769493255.myshopify.com",
+        "store_id": "store-1769493255",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-27 08:55:57"
+    },
+    {
+        "id": 214,
+        "timestamp": "2026-01-27 09:06:05",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "CA",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 09:06:05",
+                "data": {
+                    "store_url": "https://store-1769494034.myshopify.com",
+                    "store_id": "store-1769494034",
+                    "admin_url": "https://store-1769494034.myshopify.com/admin",
+                    "created_at": "2026-01-27 09:07:14"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-27 09:07:44"
+            }
+        ],
+        "store_url": "https://store-1769494034.myshopify.com",
+        "store_id": "store-1769494034",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-27 09:07:55"
+    },
+    {
+        "id": 215,
+        "timestamp": "2026-01-27 09:08:31",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "CA",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 09:08:31",
+                "data": {
+                    "store_url": "https://store-1769494174.myshopify.com",
+                    "store_id": "store-1769494174",
+                    "admin_url": "https://store-1769494174.myshopify.com/admin",
+                    "created_at": "2026-01-27 09:09:34"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-27 09:10:03"
+            }
+        ],
+        "store_url": "https://store-1769494174.myshopify.com",
+        "store_id": "store-1769494174",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-27 09:10:35"
+    },
+    {
+        "id": 216,
+        "timestamp": "2026-01-27 09:32:45",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "GB",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 09:32:45",
+                "data": {
+                    "store_url": "https://efgrdsd-20260127-093316.myshopify.com",
+                    "store_id": "efgrdsd-20260127-093316",
+                    "admin_url": "https://efgrdsd-20260127-093316.myshopify.com/admin",
+                    "created_at": "2026-01-27 09:33:49"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-27 09:34:35"
+            }
+        ],
+        "store_url": "https://efgrdsd-20260127-093316.myshopify.com",
+        "store_id": "efgrdsd-20260127-093316",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-27 09:37:26"
+    },
+    {
+        "id": 217,
+        "timestamp": "2026-01-27 09:47:51",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "GB",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 09:47:51",
+                "data": {
+                    "store_url": "https://efgrdsd-20260127-094840.myshopify.com",
+                    "store_id": "efgrdsd-20260127-094840",
+                    "admin_url": "https://efgrdsd-20260127-094840.myshopify.com/admin",
+                    "created_at": "2026-01-27 09:49:15"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-27 09:49:59"
+            }
+        ],
+        "store_url": "https://efgrdsd-20260127-094840.myshopify.com",
+        "store_id": "efgrdsd-20260127-094840",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-27 09:52:58"
+    },
+    {
+        "id": 218,
+        "timestamp": "2026-01-27 10:01:57",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "GB",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "completed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:01:57",
+                "data": {
+                    "store_url": "https://efgrdsd-20260127-100234.myshopify.com",
+                    "store_id": "efgrdsd-20260127-100234",
+                    "admin_url": "https://efgrdsd-20260127-100234.myshopify.com/admin",
+                    "created_at": "2026-01-27 10:03:08"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:03:53",
+                "token_created": true,
+                "token_preview": "shpca_19f91f05e..."
+            },
+            {
+                "step": "import_products",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:07:03",
+                "products_imported": 5,
+                "category": "phone_cases",
+                "requested_count": 5
+            },
+            {
+                "step": "transfer_ownership",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:08:38",
+                "data": {
+                    "success": true,
+                    "store_name": "efgrdsd-20260127-100234",
+                    "store_url": "efgrdsd-20260127-100234.myshopify.com",
+                    "new_owner": "mohammedwalied001912@gmail.com",
+                    "transferred_at": "2026-01-27 10:09:56",
+                    "note": "Store ownership transferred successfully via automated process"
+                }
+            }
+        ],
+        "store_url": "https://efgrdsd-20260127-100234.myshopify.com",
+        "store_id": "efgrdsd-20260127-100234",
+        "completed_at": "2026-01-27 10:10:01"
+    },
+    {
+        "id": 218,
+        "timestamp": "2026-01-27 10:01:57",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "GB",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:01:57",
+                "data": {
+                    "store_url": "https://efgrdsd-20260127-100234.myshopify.com",
+                    "store_id": "efgrdsd-20260127-100234",
+                    "admin_url": "https://efgrdsd-20260127-100234.myshopify.com/admin",
+                    "created_at": "2026-01-27 10:03:08"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:03:53",
+                "token_created": true,
+                "token_preview": "shpca_19f91f05e..."
+            },
+            {
+                "step": "import_products",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:07:03",
+                "products_imported": 5,
+                "category": "phone_cases",
+                "requested_count": 5
+            },
+            {
+                "step": "transfer_ownership",
+                "status": "completed",
+                "timestamp": "2026-01-27 10:08:38",
+                "data": {
+                    "success": true,
+                    "store_name": "efgrdsd-20260127-100234",
+                    "store_url": "efgrdsd-20260127-100234.myshopify.com",
+                    "new_owner": "mohammedwalied001912@gmail.com",
+                    "transferred_at": "2026-01-27 10:09:56",
+                    "note": "Store ownership transferred successfully via automated process"
+                }
+            }
+        ],
+        "store_url": "https://efgrdsd-20260127-100234.myshopify.com",
+        "store_id": "efgrdsd-20260127-100234",
+        "completed_at": "2026-01-27 10:10:01",
+        "error": "success.html",
+        "failed_at": "2026-01-27 10:10:01"
+    },
+    {
+        "id": 220,
+        "timestamp": "2026-01-28 14:49:47",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "AU",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "completed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:49:47",
+                "data": {
+                    "store_url": "https://efgrdsd-20260128-145053.myshopify.com",
+                    "store_id": "efgrdsd-20260128-145053",
+                    "admin_url": "https://efgrdsd-20260128-145053.myshopify.com/admin",
+                    "created_at": "2026-01-28 14:51:27"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:52:12",
+                "token_created": true,
+                "token_preview": "shpca_c22b81940..."
+            },
+            {
+                "step": "import_products",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:55:26",
+                "products_imported": 5,
+                "category": "phone_cases",
+                "requested_count": 5
+            },
+            {
+                "step": "transfer_ownership",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:56:25",
+                "data": {
+                    "success": true,
+                    "store_name": "efgrdsd-20260128-145053",
+                    "store_url": "efgrdsd-20260128-145053.myshopify.com",
+                    "new_owner": "mohammedwalied001912@gmail.com",
+                    "transferred_at": "2026-01-28 14:57:47",
+                    "note": "Store ownership transferred successfully via automated process"
+                }
+            }
+        ],
+        "store_url": "https://efgrdsd-20260128-145053.myshopify.com",
+        "store_id": "efgrdsd-20260128-145053",
+        "completed_at": "2026-01-28 14:57:52"
+    },
+    {
+        "id": 220,
+        "timestamp": "2026-01-28 14:49:47",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "AU",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:49:47",
+                "data": {
+                    "store_url": "https://efgrdsd-20260128-145053.myshopify.com",
+                    "store_id": "efgrdsd-20260128-145053",
+                    "admin_url": "https://efgrdsd-20260128-145053.myshopify.com/admin",
+                    "created_at": "2026-01-28 14:51:27"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:52:12",
+                "token_created": true,
+                "token_preview": "shpca_c22b81940..."
+            },
+            {
+                "step": "import_products",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:55:26",
+                "products_imported": 5,
+                "category": "phone_cases",
+                "requested_count": 5
+            },
+            {
+                "step": "transfer_ownership",
+                "status": "completed",
+                "timestamp": "2026-01-28 14:56:25",
+                "data": {
+                    "success": true,
+                    "store_name": "efgrdsd-20260128-145053",
+                    "store_url": "efgrdsd-20260128-145053.myshopify.com",
+                    "new_owner": "mohammedwalied001912@gmail.com",
+                    "transferred_at": "2026-01-28 14:57:47",
+                    "note": "Store ownership transferred successfully via automated process"
+                }
+            }
+        ],
+        "store_url": "https://efgrdsd-20260128-145053.myshopify.com",
+        "store_id": "efgrdsd-20260128-145053",
+        "completed_at": "2026-01-28 14:57:52",
+        "error": "success.html",
+        "failed_at": "2026-01-28 14:57:53"
+    },
+    {
+        "id": 222,
+        "timestamp": "2026-01-28 15:08:39",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "AU",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:08:39",
+                "data": {
+                    "store_url": "https://efgrdsd-20260128-150916.myshopify.com",
+                    "store_id": "efgrdsd-20260128-150916",
+                    "admin_url": "https://efgrdsd-20260128-150916.myshopify.com/admin",
+                    "created_at": "2026-01-28 15:09:49"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "started",
+                "timestamp": "2026-01-28 15:10:33"
+            }
+        ],
+        "store_url": "https://efgrdsd-20260128-150916.myshopify.com",
+        "store_id": "efgrdsd-20260128-150916",
+        "error": "Failed to retrieve access token",
+        "failed_at": "2026-01-28 15:11:14"
+    },
+    {
+        "id": 223,
+        "timestamp": "2026-01-28 15:11:35",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "AU",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "started",
+                "timestamp": "2026-01-28 15:11:35"
+            }
+        ],
+        "store_url": null,
+        "store_id": null,
+        "error": "Message: \n",
+        "failed_at": "2026-01-28 15:12:26"
+    },
+    {
+        "id": 224,
+        "timestamp": "2026-01-28 15:12:55",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "AU",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "completed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:12:55",
+                "data": {
+                    "store_url": "https://efgrdsd-20260128-151329.myshopify.com",
+                    "store_id": "efgrdsd-20260128-151329",
+                    "admin_url": "https://efgrdsd-20260128-151329.myshopify.com/admin",
+                    "created_at": "2026-01-28 15:13:58"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:14:42",
+                "token_created": true,
+                "token_preview": "shpca_1c7c8ebd7..."
+            },
+            {
+                "step": "import_products",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:17:52",
+                "products_imported": 5,
+                "category": "phone_cases",
+                "requested_count": 5
+            },
+            {
+                "step": "transfer_ownership",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:19:02",
+                "data": {
+                    "success": true,
+                    "store_name": "efgrdsd-20260128-151329",
+                    "store_url": "efgrdsd-20260128-151329.myshopify.com",
+                    "new_owner": "mohammedwalied001912@gmail.com",
+                    "transferred_at": "2026-01-28 15:20:21",
+                    "note": "Store ownership transferred successfully via automated process"
+                }
+            }
+        ],
+        "store_url": "https://efgrdsd-20260128-151329.myshopify.com",
+        "store_id": "efgrdsd-20260128-151329",
+        "completed_at": "2026-01-28 15:20:26"
+    },
+    {
+        "id": 224,
+        "timestamp": "2026-01-28 15:12:55",
+        "user_data": {
+            "email": "mohammedwalied001912@gmail.com",
+            "store_name": "efgrdsd",
+            "country": "AU",
+            "business_type": "ecommerce",
+            "product_category": "phone_cases",
+            "product_count": 5
+        },
+        "status": "failed",
+        "steps": [
+            {
+                "step": "create_account",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:12:55",
+                "data": {
+                    "store_url": "https://efgrdsd-20260128-151329.myshopify.com",
+                    "store_id": "efgrdsd-20260128-151329",
+                    "admin_url": "https://efgrdsd-20260128-151329.myshopify.com/admin",
+                    "created_at": "2026-01-28 15:13:58"
+                }
+            },
+            {
+                "step": "access_token",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:14:42",
+                "token_created": true,
+                "token_preview": "shpca_1c7c8ebd7..."
+            },
+            {
+                "step": "import_products",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:17:52",
+                "products_imported": 5,
+                "category": "phone_cases",
+                "requested_count": 5
+            },
+            {
+                "step": "transfer_ownership",
+                "status": "completed",
+                "timestamp": "2026-01-28 15:19:02",
+                "data": {
+                    "success": true,
+                    "store_name": "efgrdsd-20260128-151329",
+                    "store_url": "efgrdsd-20260128-151329.myshopify.com",
+                    "new_owner": "mohammedwalied001912@gmail.com",
+                    "transferred_at": "2026-01-28 15:20:21",
+                    "note": "Store ownership transferred successfully via automated process"
+                }
+            }
+        ],
+        "store_url": "https://efgrdsd-20260128-151329.myshopify.com",
+        "store_id": "efgrdsd-20260128-151329",
+        "completed_at": "2026-01-28 15:20:26",
+        "error": "success.html",
+        "failed_at": "2026-01-28 15:20:26"
     }
 ]

@@ -2174,7 +2174,9 @@ class EbayShopifyImporter:
         
         if not filename:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"product_import_report_{timestamp}.csv"
+            reports_dir = os.path.join("data", "reports")
+            os.makedirs(reports_dir, exist_ok=True)
+            filename = os.path.join(reports_dir, f"product_import_report_{timestamp}.csv")
         
         headers = [
             'Product Title',
