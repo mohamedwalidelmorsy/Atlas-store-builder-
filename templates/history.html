@@ -1,0 +1,376 @@
+{% extends 'base.html' %}
+
+{% block title %}Store History{% endblock %}
+
+{% block body_class %}has-sidebar{% endblock %}
+
+{% block sidebar %}
+{% include 'layout/sidebar.html' %}
+{% endblock %}
+
+{% block head %}
+<style>
+    /* Override gradient background from base template */
+    .gredient {
+        background: #ffffff !important;
+    }
+
+    .history-content {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 24px;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 32px;
+        background: transparent !important;
+        padding: 0 !important;
+        position: static !important;
+    }
+
+    /* Remove the pseudo-element background */
+    .page-header::before {
+        display: none !important;
+    }
+
+    .page-header h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #64748b;
+        font-size: 16px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        padding: 24px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+        font-size: 36px;
+        font-weight: 700;
+        color: #3b82f6;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stores-container {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stores-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .stores-header h2 {
+        color: #1e293b;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 48px 20px;
+        color: #64748b;
+    }
+
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+        font-size: 20px;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .empty-state p {
+        margin-bottom: 20px;
+    }
+
+    .store-card {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 16px;
+        border-left: 4px solid #3b82f6;
+        transition: all 0.2s ease;
+    }
+
+    .store-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .store-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .store-card.failed {
+        border-left-color: #ef4444;
+    }
+
+    .store-card.completed {
+        border-left-color: #22c55e;
+    }
+
+    .store-card.processing {
+        border-left-color: #f59e0b;
+    }
+
+    .store-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .store-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-completed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-failed {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .status-processing {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .store-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-label {
+        font-size: 12px;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .detail-value {
+        font-size: 14px;
+        color: #334155;
+        font-weight: 500;
+    }
+
+    .store-link {
+        color: #3b82f6;
+        text-decoration: none;
+    }
+
+    .store-link:hover {
+        text-decoration: underline;
+    }
+
+    .error-box {
+        margin-top: 12px;
+        padding: 10px 12px;
+        background: #fee2e2;
+        border-radius: 6px;
+        color: #991b1b;
+        font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+        .history-content {
+            padding: 0 16px;
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+        }
+
+        .stores-header {
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        .stores-header .btn {
+            width: 100%;
+        }
+
+        .store-header {
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .store-details {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="history-content">
+    <div class="page-header">
+        <h1>Store Creation History</h1>
+        <p>Track all your automated Shopify store creations</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ stores|length }}</div>
+            <div class="stat-label">Total Stores</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stores|selectattr('status', 'equalto', 'completed')|list|length }}</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stores|selectattr('status', 'equalto', 'failed')|list|length }}</div>
+            <div class="stat-label">Failed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stores|selectattr('status', 'equalto', 'processing')|list|length }}</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+    </div>
+
+    <div class="stores-container">
+        <div class="stores-header">
+            <h2>All Stores</h2>
+            <a href="/create" class="btn btn-primary">Create New Store</a>
+        </div>
+
+        {% if stores|length == 0 %}
+        <div class="empty-state">
+            <div class="empty-state-icon">&#128230;</div>
+            <h3>No Stores Yet</h3>
+            <p>You haven't created any stores yet. Start by creating your first store!</p>
+            <a href="/create" class="btn btn-primary">Create Your First Store</a>
+        </div>
+        {% else %}
+        {% for store in stores|reverse %}
+        <div class="store-card {{ store.status }}">
+            <div class="store-header">
+                <div class="store-name">
+                    {% if store.user_data and store.user_data.store_name %}
+                        {{ store.user_data.store_name }}
+                    {% else %}
+                        Store #{{ store.id }}
+                    {% endif %}
+                </div>
+                <span class="status-badge status-{{ store.status }}">
+                    {% if store.status == 'completed' %}
+                        Completed
+                    {% elif store.status == 'failed' %}
+                        Failed
+                    {% else %}
+                        In Progress
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="store-details">
+                <div class="detail-item">
+                    <div class="detail-label">Customer Email</div>
+                    <div class="detail-value">
+                        {% if store.user_data and store.user_data.email %}
+                            {{ store.user_data.email }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Store URL</div>
+                    <div class="detail-value">
+                        {% if store.store_url %}
+                            <a href="{{ store.store_url }}" target="_blank" class="store-link">{{ store.store_url }}</a>
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Created At</div>
+                    <div class="detail-value">{{ store.timestamp }}</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Products</div>
+                    <div class="detail-value">
+                        {% if store.products_imported %}
+                            {{ store.products_imported }} products
+                        {% else %}
+                            {% set products_step = store.steps|selectattr('step', 'equalto', 'import_products')|first %}
+                            {% if products_step and products_step.products_imported %}
+                                {{ products_step.products_imported }} products
+                            {% else %}
+                                0 products
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if store.error %}
+            <div class="error-box">
+                <strong>Error:</strong> {{ store.error }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
