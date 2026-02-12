@@ -1,0 +1,209 @@
+/* Create page styles */
+
+.create-page {
+    flex: 1;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.create-form-container {
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+}
+
+.create-form-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.create-form-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 8px 0;
+}
+
+.create-form-header p {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+.create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-field label .required {
+    color: #ef4444;
+}
+
+.form-field input,
+.form-field select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #1f2937;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-field input::placeholder {
+    color: #9ca3af;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+    outline: none;
+    border-color: #3545D6;
+    box-shadow: 0 0 0 3px rgba(53, 69, 214, 0.1);
+}
+
+.form-field select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+.form-hint {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    margin-top: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: #3545D6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.submit-btn:hover {
+    background: #2a38b0;
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.submit-btn .spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.submit-btn .spinner.show {
+    display: block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error-box {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 0.9rem;
+}
+
+.error-box.hidden {
+    display: none;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    .create-page {
+        padding: 24px 16px;
+    }
+
+    .create-form-container {
+        padding: 28px 20px;
+        border-radius: 12px;
+    }
+
+    .create-form-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .create-form-header p {
+        font-size: 0.9rem;
+    }
+
+    .form-field input,
+    .form-field select {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+
+    .submit-btn {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 400px) {
+    .create-page {
+        padding: 16px 12px;
+    }
+
+    .create-form-container {
+        padding: 24px 16px;
+    }
+
+    .create-form-header h1 {
+        font-size: 1.35rem;
+    }
+
+    .create-form {
+        gap: 16px;
+    }
+}

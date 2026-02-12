@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, redirect, render_template, request, jsonify
 from datetime import datetime
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
@@ -89,7 +89,13 @@ def validate_config():
 @app.route('/')
 def index():
     """Main page - user input form"""
-    return render_template('index.html')
+    return redirect('/create')
+
+@app.route('/create')
+def create():
+    """Store creation form page"""
+    return render_template('create.html')
+
 
 @app.route('/history')
 def history():
