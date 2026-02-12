@@ -1,0 +1,285 @@
+/* Success Page Styles */
+
+.success-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding: 40px 24px;
+}
+
+.success-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    max-width: 560px;
+    width: 100%;
+    padding: 48px 40px;
+    text-align: center;
+}
+
+/* Success Icon */
+.success-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    /* background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); */
+    background: #2F6FED;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3); */
+}
+
+.success-icon-wrapper svg {
+    width: 40px;
+    height: 40px;
+    color: #fff;
+}
+
+/* Typography */
+.success-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px;
+}
+
+.success-subtitle {
+    font-size: 16px;
+    color: #64748b;
+    margin: 0 0 32px;
+}
+
+/* Store Details Card */
+.store-details {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+    text-align: left;
+}
+
+.store-details-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 16px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-row:first-of-type {
+    padding-top: 0;
+}
+
+.detail-label {
+    font-size: 14px;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    text-align: right;
+    word-break: break-all;
+}
+
+.detail-value a {
+    color: #3545D6;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.detail-value a:hover {
+    color: #2a38b0;
+    text-decoration: underline;
+}
+
+/* Primary CTA Button */
+.visit-store-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #3545D6 0%, #2a38b0 100%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(53, 69, 214, 0.25);
+    margin-bottom: 16px;
+}
+
+.visit-store-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(53, 69, 214, 0.35);
+}
+
+.visit-store-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Secondary Buttons */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 14px 20px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.btn-secondary.primary {
+    background: #f0f5ff;
+    border-color: #3545D6;
+    color: #3545D6;
+}
+
+.btn-secondary.primary:hover {
+    background: #e0e7ff;
+}
+
+/* Confetti Animation (optional decorative element) */
+.success-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #22c55e, #3545D6, #22c55e);
+    border-radius: 16px 16px 0 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .success-page {
+        padding: 24px 16px;
+        min-height: calc(100vh - 160px);
+    }
+
+    .success-card {
+        padding: 32px 24px;
+    }
+
+    .success-icon-wrapper {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 20px;
+    }
+
+    .success-icon-wrapper svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .success-title {
+        font-size: 24px;
+    }
+
+    .success-subtitle {
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .store-details {
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 0;
+    }
+
+    .detail-value {
+        text-align: left;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn-secondary {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .success-page {
+        padding: 16px 12px;
+    }
+
+    .success-card {
+        padding: 24px 16px;
+        border-radius: 12px;
+    }
+
+    .success-title {
+        font-size: 20px;
+    }
+
+    .success-subtitle {
+        font-size: 14px;
+    }
+
+    .store-details {
+        padding: 16px;
+    }
+
+    .store-details-title {
+        font-size: 12px;
+    }
+
+    .detail-label,
+    .detail-value {
+        font-size: 13px;
+    }
+
+    .visit-store-btn {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+
+    .btn-secondary {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+}

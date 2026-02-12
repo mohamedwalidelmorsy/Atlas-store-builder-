@@ -101,6 +101,20 @@ def processing(store_id):
     """Processing/loading page - polls for status"""
     return render_template('processing.html', store_id=store_id)
 
+@app.route('/success')
+def success():
+    """Success page - displays store creation results"""
+    # Get data from query params (for async flow)
+    store_url = request.args.get('store_url', '')
+    store_name = request.args.get('store_name', '')
+    products_count = request.args.get('products_count', 0)
+    customer_email = request.args.get('customer_email', '')
+
+    return render_template('success.html',
+                         store_url=store_url,
+                         store_name=store_name,
+                         products_count=products_count,
+                         customer_email=customer_email)
 
 @app.route('/history')
 def history():

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Store Created Successfully{% endblock %}
+
+{% block body_class %}has-sidebar{% endblock %}
+
+{% block sidebar %}
+{% include 'layout/sidebar.html' %}
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/success.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="success-page">
+    <div class="success-card">
+        <!-- Success Icon -->
+        <div class="success-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+
+        <!-- Title -->
+        <h1 class="success-title">Store Created Successfully!</h1>
+        <p class="success-subtitle">Your Shopify store is ready and fully configured</p>
+
+        <!-- Store Details -->
+        <div class="store-details">
+            <h3 class="store-details-title">Store Details</h3>
+
+            <div class="detail-row">
+                <span class="detail-label">Store Name</span>
+                <span class="detail-value" id="storeName">{{ store_name }}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Store URL</span>
+                <span class="detail-value">
+                    <a href="{{ store_url }}" target="_blank" id="storeUrl">{{ store_url }}</a>
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Owner Email</span>
+                <span class="detail-value" id="customerEmail">{{ customer_email }}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Products Imported</span>
+                <span class="detail-value" id="productsCount">{{ products_count }} products</span>
+            </div>
+        </div>
+
+        <!-- Primary CTA -->
+        <a href="{{ store_url }}" target="_blank" class="visit-store-btn" id="visitStoreBtn">
+            Visit Your Store
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+        </a>
+
+        <!-- Secondary Actions -->
+        <div class="action-buttons">
+            <a href="/create" class="btn-secondary primary">Create Another Store</a>
+            <a href="/history" class="btn-secondary">View All Stores</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    // Check if we have data from query params (for the async flow)
+    const urlParams = new URLSearchParams(window.location.search);
+    const storeUrl = urlParams.get('store_url');
+    const storeName = urlParams.get('store_name');
+    const productsCount = urlParams.get('products_count');
+    const customerEmail = urlParams.get('customer_email');
+
+    // Update the page with query param data if available
+    if (storeUrl) {
+        document.getElementById('storeUrl').href = storeUrl;
+        document.getElementById('storeUrl').textContent = storeUrl;
+        document.getElementById('visitStoreBtn').href = storeUrl;
+    }
+    if (storeName) {
+        document.getElementById('storeName').textContent = storeName;
+    }
+    if (productsCount) {
+        document.getElementById('productsCount').textContent = productsCount + ' products';
+    }
+    if (customerEmail) {
+        document.getElementById('customerEmail').textContent = customerEmail;
+    }
+})();
+</script>
+{% endblock %}
