@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Creating Your Store{% endblock %}
+
+{% block body_class %}has-sidebar{% endblock %}
+
+{% block sidebar %}
+{% include 'layout/sidebar.html' %}
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/processing.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="processing-page">
+    <!-- Processing State -->
+    <div class="processing-card" id="processingCard">
+        <!-- Spinner -->
+        <div class="spinner-wrapper">
+            <div class="spinner"></div>
+            <svg class="spinner-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+        </div>
+
+        <!-- Title -->
+        <h1 class="processing-title">Creating Your Store</h1>
+        <p class="processing-status" id="statusMessage">Initializing...</p>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p class="progress-text"><span id="progressPercent">0</span>% Complete</p>
+            <p class="progress-hint">You can close this window and check back later</p>
+        </div>
+    </div>
+
+    <!-- Error State (hidden by default) -->
+    <div class="error-card hidden" id="errorCard">
+        <div class="error-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+
+        <h1 class="error-title">Something Went Wrong</h1>
+        <p class="error-subtitle">We encountered an issue while creating your store</p>
+
+        <!-- <div class="error-message-box">
+            <p id="errorMessage">An unexpected error occurred</p>
+        </div> -->
+
+        <div class="error-actions">
+            <a href="/create" class="btn-retry">Try Again</a>
+            <a href="mailto:support@tsscout.com?subject=Store Creation Issue&body=Store ID: {{ store_id }}" class="btn-report">Report Issue</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const storeId = '{{ store_id }}';
+    const POLL_INTERVAL = 2000;
+    let pollTimer = null;
+
+    // DOM Elements
+    const processingCard = document.getElementById('processingCard');
+    const errorCard = document.getElementById('errorCard');
+    const progressBar = document.getElementById('progressBar');
+    const progressPercent = document.getElementById('progressPercent');
+    const statusMessage = document.getElementById('statusMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    function updateProgress(percent, message) {
+        progressBar.style.width = percent + '%';
+        progressPercent.textContent = Math.round(percent);
+        if (message) {
+            statusMessage.textContent = message;
+        }
+    }
+
+    function showError(message) {
+        processingCard.classList.add('hidden');
+        errorCard.classList.remove('hidden');
+        errorMessage.textContent = message || 'An unexpected error occurred';
+    }
+
+    function pollStatus() {
+        fetch('/api/stores/' + storeId + '/status')
+            .then(response => response.json())
+            .then(data => {
+                // Update progress
+                const percent = data.progress_percent || 0;
+                const message = data.message || 'Processing...';
+                updateProgress(percent, message);
+
+                // Handle status
+                if (data.status === 'completed') {
+                    updateProgress(100, 'Store created successfully!');
+                    // Redirect to success page
+                    setTimeout(function() {
+                        const params = new URLSearchParams({
+                            store_url: data.store_url || '',
+                            store_name: data.store_name || '',
+                            products_count: data.products_imported || '0',
+                            customer_email: data.customer_email || ''
+                        });
+                        window.location.href = '/success?' + params.toString();
+                    }, 500);
+                } else if (data.status === 'failed') {
+                    showError(data.error || 'Store creation failed. Please try again.');
+                } else {
+                    // Status is 'processing', continue polling
+                    pollTimer = setTimeout(pollStatus, POLL_INTERVAL);
+                }
+            })
+            .catch(error => {
+                console.error('Polling error:', error);
+                // Continue polling despite network errors
+                pollTimer = setTimeout(pollStatus, POLL_INTERVAL);
+            });
+    }
+
+    // Start polling
+    pollStatus();
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', function() {
+        if (pollTimer) {
+            clearTimeout(pollTimer);
+        }
+    });
+})();
+</script>
+{% endblock %}

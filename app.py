@@ -96,6 +96,11 @@ def create():
     """Store creation form page"""
     return render_template('create.html')
 
+@app.route('/processing/<store_id>')
+def processing(store_id):
+    """Processing/loading page - polls for status"""
+    return render_template('processing.html', store_id=store_id)
+
 
 @app.route('/history')
 def history():
