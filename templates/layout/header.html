@@ -1,0 +1,50 @@
+<!-- Header Styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+
+<!-- Header Start -->
+<header class="main-header">
+    <nav class="header-nav">
+        <div class="header-container">
+            <!-- Logo -->
+            <a class="header-logo" href="/">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo">
+            </a>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="burger-menu" type="button" aria-label="Toggle menu">
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+            </button>
+        </div>
+
+    </nav>
+</header>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const burgerMenu = document.querySelector('.burger-menu');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const hasSidebar = document.body.classList.contains('has-sidebar');
+
+        if (burgerMenu) {
+            burgerMenu.addEventListener('click', function() {
+                // If page has sidebar and we're on mobile, toggle sidebar
+                if (hasSidebar && sidebar && window.innerWidth <= 768) {
+                    sidebar.classList.toggle('mobile-open');
+                    if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
+                    document.body.classList.toggle('sidebar-open');
+                    this.classList.toggle('active');
+                } else if (mobileMenu) {
+                    // Otherwise toggle regular mobile menu
+                    this.classList.toggle('active');
+                    mobileMenu.classList.toggle('open');
+                }
+            });
+        }
+    });
+</script>
+<!-- Header End -->

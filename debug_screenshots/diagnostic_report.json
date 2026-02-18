@@ -1,0 +1,44 @@
+[
+  {
+    "strategy": "STRATEGY 1: STRICT DOM SELECTOR",
+    "success": false,
+    "value": null,
+    "reason": "No elements matched the strict XPath selector."
+  },
+  {
+    "strategy": "STRATEGY 2: LABEL-BASED MATCHING",
+    "success": false,
+    "value": null,
+    "reason": "No label with 'Password' text found."
+  },
+  {
+    "strategy": "STRATEGY 3: ARIA-BASED DETECTION",
+    "success": false,
+    "value": null,
+    "reason": "No inputs with matching aria attributes found."
+  },
+  {
+    "strategy": "STRATEGY 4: VISIBLE TEXTFIELD SCAN",
+    "success": false,
+    "value": null,
+    "reason": "No visible, enabled input with maxlength=100 and a value found."
+  },
+  {
+    "strategy": "STRATEGY 5: REACT VALUE ACCESS (JS)",
+    "success": false,
+    "value": null,
+    "reason": "No candidate inputs found via JS."
+  },
+  {
+    "strategy": "STRATEGY 6: DOM SNAPSHOT SCAN",
+    "success": false,
+    "value": null,
+    "reason": "No reasonable value= candidates found in DOM snapshot."
+  },
+  {
+    "strategy": "STRATEGY 7: VISUAL CONFIRMATION",
+    "success": false,
+    "value": null,
+    "reason": "No inputs found on page for visual confirmation."
+  }
+]

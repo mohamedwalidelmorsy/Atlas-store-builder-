@@ -1,0 +1,159 @@
+<!-- Sidebar Styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+
+<!-- Sidebar Start -->
+<aside class="sidebar" id="sidebar">
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <!-- Sidebar Content -->
+    <div class="sidebar-content">
+        <nav class="sidebar-nav">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="/" class="sidebar-link {% if request.endpoint == 'index' %}active{% endif %}">
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-house"></i>
+                        </span>
+                        <span class="sidebar-text">Home</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/history" class="sidebar-link {% if request.endpoint == 'history' %}active{% endif %}">
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </span>
+                        <span class="sidebar-text">History</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Separator -->
+            <div class="sidebar-separator"></div>
+
+            <!-- Tools Section -->
+            <div class="sidebar-section">
+                <span class="sidebar-section-title">Tools</span>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link disabled" title="Coming Soon">
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        </span>
+                        <span class="sidebar-text">AI Tool</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/create" class="sidebar-link {% if request.endpoint == 'create' %}active{% endif %}">
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-plus-circle"></i>
+                        </span>
+                        <span class="sidebar-text">Create Store</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link disabled" title="Coming Soon">
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </span>
+                        <span class="sidebar-text">Analytics</span>
+                        <span class="sidebar-badge">Soon</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        <a href="https://app.tsscout.com/login?popup=1" class="sidebar-cta" target="_blank">
+            <span class="sidebar-icon">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </span>
+            <span class="sidebar-text">Go to TSScout APP</span>
+        </a>
+    </div>
+</aside>
+
+<!-- Mobile Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script>
+(function() {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (!sidebar) return;
+
+    // Store collapsed state in localStorage
+    const STORAGE_KEY = 'sidebar-collapsed';
+
+    // Check if on mobile
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    // Check if on tablet
+    function isTablet() {
+        return window.innerWidth > 768 && window.innerWidth <= 1024;
+    }
+
+    // Initialize sidebar state from localStorage (desktop/tablet)
+    function initSidebar() {
+        if (!isMobile()) {
+            const isCollapsed = localStorage.getItem(STORAGE_KEY) === 'true';
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+                document.body.classList.add('sidebar-collapsed');
+            }
+        }
+    }
+
+    // Toggle sidebar (desktop/tablet - collapse/expand)
+    function toggleSidebar(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Toggle sidebar clicked');
+        if (!isMobile()) {
+            console.log('is mobile false, toggling collapse');
+            sidebar.classList.toggle('collapsed');
+            document.body.classList.toggle('sidebar-collapsed');
+            localStorage.setItem(STORAGE_KEY, sidebar.classList.contains('collapsed'));
+        }
+    }
+
+    // Close mobile sidebar
+    function closeMobileSidebar() {
+        sidebar.classList.remove('mobile-open');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+        // Also reset burger menu state
+        const burgerMenu = document.querySelector('.burger-menu');
+        if (burgerMenu) burgerMenu.classList.remove('active');
+    }
+
+    // Event listeners
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', toggleSidebar);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeMobileSidebar);
+    }
+
+    // Handle resize - close mobile sidebar when resizing to larger screen
+    window.addEventListener('resize', function() {
+        if (!isMobile()) {
+            closeMobileSidebar();
+        }
+    });
+
+    // Initialize
+    initSidebar();
+})();
+</script>
+<!-- Sidebar End -->

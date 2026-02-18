@@ -1,0 +1,43 @@
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Manrope', sans-serif;
+    min-height: 100vh;
+    background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(198, 247, 74, 0.35), transparent 60%),
+        radial-gradient(900px 500px at -10% 10%, rgba(36, 83, 255, 0.20), transparent 55%),
+        linear-gradient(180deg, #F7FAFF 0%, #F0F5FF 100%);
+    background-attachment: fixed;
+}
+
+/* Page wrapper for flex layout - footer stays at bottom */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Content wrapper - holds sidebar and main content side by side */
+.content-wrapper {
+    display: flex;
+    flex: 1;
+}
+
+/* Main content area */
+.main-content {
+    flex: 1;
+    min-width: 0; /* Prevent flex item overflow */
+    position: relative;
+    z-index: 1; /* Below sidebar toggle button */
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+}

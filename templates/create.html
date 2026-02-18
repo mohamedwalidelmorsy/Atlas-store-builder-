@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Your Store{% endblock %}
+
+{% block body_class %}has-sidebar{% endblock %}
+
+{% block sidebar %}
+{% include 'layout/sidebar.html' %}
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="create-page">
+    <div class="create-form-container">
+        <div class="create-form-header">
+            <h1>Create Your Shopify Store</h1>
+            <p>Fill in the details below to get your automated store up and running</p>
+        </div>
+
+        <form id="createStoreForm" class="create-form">
+            <div class="form-field">
+                <label for="client_name">
+                    Client Name <span class="required">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="client_name"
+                    name="client_name"
+                    required
+                    placeholder="John Doe"
+                    maxlength="100"
+                    autocomplete="name"
+                >
+                <span class="form-hint">Your full name or business name</span>
+            </div>
+
+            <div class="form-field">
+                <label for="store_name">
+                    Store Name <span class="required">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="store_name"
+                    name="store_name"
+                    required
+                    placeholder="My Amazing Store"
+                    maxlength="50"
+                    pattern="[A-Za-z0-9\s\-]+"
+                    title="Only letters, numbers, spaces, and hyphens allowed"
+                >
+                <span class="form-hint">Choose a memorable name for your store</span>
+            </div>
+
+            <div class="form-field">
+                <label for="email">
+                    Email Address <span class="required">*</span>
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                >
+                <span class="form-hint">This will be the owner email for your Shopify store</span>
+            </div>
+
+            <div class="form-field">
+                <label for="product_category">
+                    Main Category <span class="required">*</span>
+                </label>
+                <select id="product_category" name="product_category" required>
+                    <option value="">Select main category</option>
+                    <option value="phone_cases">Phone Cases</option>
+                    <option value="iphone">iPhone</option>
+                    <option value="samsung">Samsung Phones</option>
+                    <option value="tablets">Tablets</option>
+                    <option value="ipad">iPad</option>
+                    <option value="apple_watch">Apple Watch</option>
+                    <option value="airpods">AirPods</option>
+                    <option value="chargers">Chargers & Cables</option>
+                    <option value="power_banks">Power Banks</option>
+                    <option value="headphones">Headphones</option>
+                </select>
+                <span class="form-hint">Choose your main electronics category</span>
+            </div>
+
+            <div class="form-field">
+                <label for="country">
+                    Country <span class="required">*</span>
+                </label>
+                <select id="country" name="country" required>
+                    <option value="">Select your country</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                    <option value="ES">Spain</option>
+                    <option value="IT">Italy</option>
+                    <option value="SG">Singapore</option>
+                    <option value="AE">United Arab Emirates</option>
+                    <option value="EG">Egypt</option>
+                </select>
+                <span class="form-hint">Select the country where your business operates</span>
+            </div>
+
+            <div class="form-field">
+                <label for="product_count">
+                    Number of Products
+                </label>
+                <select id="product_count" name="product_count">
+                    <option value="5" selected>5 Products</option>
+                    <option value="10" disabled>10 Products (Coming Soon)</option>
+                    <option value="15" disabled>15 Products (Coming Soon)</option>
+                    <option value="20" disabled>20 Products (Coming Soon)</option>
+                </select>
+                <span class="form-hint">Number of products to import (V1: 5 products only)</span>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="spinner" id="spinner"></span>
+                <span id="btnText">Create My Store</span>
+            </button>
+        </form>
+
+        <div id="errorMessage" class="error-box hidden">
+            <p id="errorText"></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const form = document.getElementById('createStoreForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const spinner = document.getElementById('spinner');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+
+    // Store name validation - only allow valid characters
+    const storeNameInput = document.getElementById('store_name');
+    storeNameInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^A-Za-z0-9\s\-]/g, '');
+    });
+
+    // Email validation
+    const emailInput = document.getElementById('email');
+    emailInput.addEventListener('blur', function() {
+        const email = this.value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email && !emailPattern.test(email)) {
+            this.setCustomValidity('Please enter a valid email address');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    // Form submission
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Hide any previous error
+        errorMessage.classList.add('hidden');
+
+        // Disable button and show loading state
+        submitBtn.disabled = true;
+        btnText.textContent = 'Creating Store...';
+        spinner.classList.add('show');
+
+        // Collect form data
+        const formData = {
+            client_name: document.getElementById('client_name').value.trim(),
+            store_name: document.getElementById('store_name').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            product_category: document.getElementById('product_category').value,
+            country: document.getElementById('country').value,
+            product_count: parseInt(document.getElementById('product_count').value)
+        };
+
+        try {
+            const response = await fetch('/api/stores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to create store');
+            }
+
+            // Redirect to processing page with store_id
+            if (data.store_id) {
+                window.location.href = '/processing/' + data.store_id;
+            } else {
+                throw new Error('No store ID returned');
+            }
+
+        } catch (error) {
+            // Show error message
+            errorText.textContent = error.message;
+            errorMessage.classList.remove('hidden');
+
+            // Reset button state
+            submitBtn.disabled = false;
+            btnText.textContent = 'Create My Store';
+            spinner.classList.remove('show');
+        }
+    });
+})();
+</script>
+{% endblock %}
