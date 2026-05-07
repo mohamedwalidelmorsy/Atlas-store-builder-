@@ -319,7 +319,7 @@ class AccessTokenManager:
     def configure_scopes(self):
         """Configure API scopes"""
         try:
-            scopes = "read_products,write_products"
+            scopes = "read_products,write_products,write_themes"
             print(f"\n Configuring scopes: {scopes}")
             
             # Verify we're on the app page
@@ -614,13 +614,6 @@ class AccessTokenManager:
                 print("\n Failed to extract credentials")
                 print(f"   Client ID found: {bool(self.client_id)}")
                 print(f"   Client Secret found: {bool(self.client_secret)}")
-                
-                try:
-                    with open(f"page_source_{self.store_name}.html", 'w', encoding='utf-8') as f:
-                        f.write(self.driver.page_source)
-                    print(f" Page source saved: page_source_{self.store_name}.html")
-                except:
-                    pass
                 
                 self.save_error_screenshot(f"credentials_extraction_failed_{self.store_name}.png")
                 

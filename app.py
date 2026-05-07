@@ -1,8 +1,10 @@
+import sys
+sys.stdout.reconfigure(line_buffering=True)  # Force stdout flush on every line
+
 from flask import Flask, redirect, render_template, request, jsonify
 from datetime import datetime
 from dotenv import load_dotenv
 import os
-import sys
 from concurrent.futures import ThreadPoolExecutor
 import uuid
 import json
@@ -276,7 +278,8 @@ def create_store():
         
         # Import and execute product service
         from services.product import ProductImporter
-        product_importer = ProductImporter(access_token, store_data['store_url'])
+        product_importer = ProductImporter(access_token, store_data['store_url'],
+                                           customer_email=user_data['email'])
         imported_products = product_importer.import_products(
             category=user_data['product_category'],
             count=user_data['product_count']  # Pass user-specified count
@@ -416,10 +419,12 @@ def run_automation_background(store_id, user_data):
     Background automation task - runs asynchronously
     Updates database with progress at each step
     """
+    print(f"\n[BG THREAD] run_automation_background STARTED for store_id={store_id}", flush=True)
     browser_session = None
 
     try:
         # Step 1: Create Shopify Account (0-25%)
+        print(f"[BG THREAD] Step 1 - updating status to create_account", flush=True)
         update_entry_status(store_id, {
             'current_step': 'create_account',
             'message': 'Creating your store...',
@@ -479,7 +484,8 @@ def run_automation_background(store_id, user_data):
         })
 
         from services.product import ProductImporter
-        product_importer = ProductImporter(access_token, store_data['store_url'])
+        product_importer = ProductImporter(access_token, store_data['store_url'],
+                                           customer_email=user_data['email'])
         imported_products = product_importer.import_products(
             category=user_data.get('product_category', 'electronics'),
             count=user_data['product_count']
@@ -519,6 +525,11 @@ def run_automation_background(store_id, user_data):
         import traceback
         tb = traceback.format_exc()
 
+        print(f"\n[BG THREAD] *** EXCEPTION CAUGHT ***", flush=True)
+        print(f"[BG THREAD] Error type : {type(e).__name__}", flush=True)
+        print(f"[BG THREAD] Error msg  : {str(e)}", flush=True)
+        print(f"[BG THREAD] Traceback  :\n{tb}", flush=True)
+
         # Ensure browser is closed on error
         if browser_session:
             try:
@@ -534,8 +545,8 @@ def run_automation_background(store_id, user_data):
             'failed_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         })
 
-        print(f"[BACKGROUND] Automation failed for store_id: {store_id} - {str(e)}")
-        print(f"[TRACEBACK] {tb}")
+        print(f"[BACKGROUND] Automation failed for store_id: {store_id} - {str(e)}", flush=True)
+        print(f"[TRACEBACK] {tb}", flush=True)
 
 
 @app.route('/api/stores', methods=['POST'])
@@ -622,9 +633,10 @@ def api_create_store():
         save_history(entry)
 
         # Start background automation
+        print(f"[API] Submitting background task for store_id: {store_id}", flush=True)
         executor.submit(run_automation_background, store_id, user_data)
 
-        print(f"[API] Store creation started - store_id: {store_id}")
+        print(f"[API] Store creation started - store_id: {store_id}", flush=True)
 
         # Return immediately (202 Accepted)
         return jsonify({

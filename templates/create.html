@@ -20,7 +20,7 @@
             <p>Fill in the details below to get your automated store up and running</p>
         </div>
 
-        <form id="createStoreForm" class="create-form">
+        <form id="createStoreForm" class="create-form" novalidate>
             <div class="form-field">
                 <label for="client_name">
                     Client Name <span class="required">*</span>
@@ -168,6 +168,7 @@
     // Form submission
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
+        console.log('DEBUG: Form Submit Triggered');
 
         // Hide any previous error
         errorMessage.classList.add('hidden');
@@ -187,7 +188,10 @@
             product_count: parseInt(document.getElementById('product_count').value)
         };
 
+        console.log('DEBUG: formData =', JSON.stringify(formData));
+
         try {
+            console.log('DEBUG: Sending fetch to /api/stores...');
             const response = await fetch('/api/stores', {
                 method: 'POST',
                 headers: {
@@ -197,6 +201,7 @@
             });
 
             const data = await response.json();
+            console.log('DEBUG: Response status =', response.status, '| body =', JSON.stringify(data));
 
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to create store');
@@ -210,6 +215,7 @@
             }
 
         } catch (error) {
+            console.error('DEBUG: Caught error =', error.message, error);
             // Show error message
             errorText.textContent = error.message;
             errorMessage.classList.remove('hidden');
